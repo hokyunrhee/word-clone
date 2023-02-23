@@ -12,28 +12,28 @@ describe("GuessInput", () => {
   });
 
   it("submits user input in uppercase", async () => {
-    const spy = jest.spyOn(console, "log");
+    const onSubmit = jest.fn();
     const user = userEvent.setup();
 
-    render(<GuessInput />);
+    render(<GuessInput onSubmit={onSubmit} />);
 
     await user.click(screen.getByText(/enter guess/i));
 
     await user.keyboard("hello{enter}");
 
-    expect(spy).toHaveBeenCalledWith("HELLO");
-    expect(screen.getByRole("textbox")).toHaveValue('')
+    expect(onSubmit).toHaveBeenCalledWith("HELLO");
+    expect(screen.getByRole("textbox")).toHaveValue("");
   });
 
   it("does not submit less than 5 characters", async () => {
-    const spy = jest.spyOn(console, "log");
+    const onSubmit = jest.fn();
     const user = userEvent.setup();
 
-    render(<GuessInput />);
+    render(<GuessInput onSubmit={onSubmit} />);
 
     await user.type(screen.getByRole("textbox"), "hi{enter}");
 
-    expect(spy).not.toHaveBeenCalled();
-    expect(screen.getByRole("textbox")).toHaveValue('hi')
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByRole("textbox")).toHaveValue("hi");
   });
 });
