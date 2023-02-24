@@ -1,7 +1,8 @@
 import { range } from "../../utils";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
+import { checkGuess } from "../../game-helpers";
 
-export const GuessResults = ({ guesses }) => {
+export const GuessResults = ({ answer, guesses }) => {
   const rows = range(0, NUM_OF_GUESSES_ALLOWED);
 
   return (
@@ -9,24 +10,31 @@ export const GuessResults = ({ guesses }) => {
       {rows.map((index) => {
         const { id = index, word = "" } = guesses[index] || {};
         const labelText = `row-${index + 1}`;
+        const results =
+          checkGuess(word, answer) ||
+          range(0, 5).map(() => ({ letter: null, status: null }));
 
-        return <Guess key={id} word={word} labelText={labelText} />;
+        return <Guess key={id} results={results} labelText={labelText} />;
       })}
     </div>
   );
 };
 
-const Guess = ({ word, labelText }) => {
-  const characters = word.split("");
-
+const Guess = ({ results, labelText }) => {
   return (
     <p className="guess" role="group" aria-label={labelText}>
       {range(0, 5).map((index) => {
-        const labelText = characters[index] ?? "empty";
+        const { letter, status } = results[index];
+        const labelText = letter ?? "empty";
 
         return (
-          <span key={index} className="cell" role="img" aria-label={labelText}>
-            {characters[index]}
+          <span
+            key={index}
+            className={status ? `cell ${status}` : "cell"}
+            role="img"
+            aria-label={labelText}
+          >
+            {letter}
           </span>
         );
       })}
