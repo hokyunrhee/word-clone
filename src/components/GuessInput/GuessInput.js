@@ -1,6 +1,6 @@
 import React from "react";
 
-export const GuessInput = ({ onSubmit }) => {
+export const GuessInput = ({ onSubmit, disabled }) => {
   const [guess, setGuess] = React.useState("");
 
   const handleChange = (event) => setGuess(event.target.value);
@@ -10,7 +10,8 @@ export const GuessInput = ({ onSubmit }) => {
     setGuess("");
   };
 
-  const disabled = guess.length < 5;
+  const isInputDisabled = disabled;
+  const isButtondisabled = guess.length < 5 || disabled;
 
   return (
     <form className="guess-input-wrapper" onSubmit={handleSubmit}>
@@ -23,12 +24,13 @@ export const GuessInput = ({ onSubmit }) => {
         title="Enter alphabets only"
         value={guess}
         onChange={handleChange}
+        disabled={isInputDisabled}
       />
       <button
         className="visually-hidden"
         type="submit"
-        disabled={disabled}
-      ></button>
+        disabled={isButtondisabled}
+      />
     </form>
   );
 };

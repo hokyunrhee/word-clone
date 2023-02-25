@@ -4,13 +4,31 @@ import { GuessResults } from "./GuessResults";
 
 describe("GuessResults", () => {
   it("displays 3 possible statuses", () => {
-    const answer = "WORLD";
+    //  answer: WORLD
     const guesses = [
-      { id: 0, word: "WHALE" },
-      { id: 1, word: "NOVEL" },
+      {
+        id: 0,
+        result: [
+          { letter: "W", status: "correct" },
+          { letter: "H", status: "incorrect" },
+          { letter: "A", status: "incorrect" },
+          { letter: "L", status: "correct" },
+          { letter: "E", status: "incorrect" },
+        ],
+      },
+      {
+        id: 1,
+        result: [
+          { letter: "N", status: "incorrect" },
+          { letter: "O", status: "correct" },
+          { letter: "V", status: "incorrect" },
+          { letter: "E", status: "incorrect" },
+          { letter: "L", status: "misplaced" },
+        ],
+      },
     ];
 
-    render(<GuessResults answer={answer} guesses={guesses} />);
+    render(<GuessResults guesses={guesses} />);
 
     const row1 = screen.getByLabelText("row-1");
     expect(within(row1).getByLabelText("W")).toHaveClass("cell", "correct");

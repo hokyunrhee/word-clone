@@ -1,26 +1,36 @@
 import React from "react";
 
-import { sample } from "../../utils";
-import { WORDS } from "../../data";
 import { GuessInput } from "../GuessInput";
 import { GuessResults } from "../GuessResults";
+import { Banner } from "../Banner";
+import { checkGuess } from "../../game-helpers";
+import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
-
-function Game() {
+function Game({ answer }) {
   const [guesses, setGuesses] = React.useState([]);
+  const hasCorrectGuess = guesses.some(({ result }) =>
+    result.every(({ status }) => status === "correct")
+  );
+  const attemptsCount = guesses.length;
+  const isGameOver =
+    hasCorrectGuess || attemptsCount === NUM_OF_GUESSES_ALLOWED;
 
   const handleSubmit = (word) => {
-    setGuesses([...guesses, { id: guesses.length, word }]);
+    const result = checkGuess(word, answer);
+    setGuesses([...guesses, { id: guesses.length, result }]);
   };
 
   return (
     <>
-      <GuessResults answer={answer} guesses={guesses} />
-      <GuessInput onSubmit={handleSubmit} />
+      <GuessResults guesses={guesses} />
+      <GuessInput onSubmit={handleSubmit} disabled={isGameOver} />
+      {isGameOver && (
+        <Banner
+          hasCorrectGuess={hasCorrectGuess}
+          attemptsCount={attemptsCount}
+          answer={answer}
+        />
+      )}
     </>
   );
 }
