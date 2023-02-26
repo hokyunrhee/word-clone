@@ -5,7 +5,7 @@ import { GuessResults } from "./GuessResults";
 describe("GuessResults", () => {
   it("displays 3 possible statuses", () => {
     //  answer: WORLD
-    const guesses = [
+    const results = [
       {
         id: 0,
         result: [
@@ -28,7 +28,7 @@ describe("GuessResults", () => {
       },
     ];
 
-    render(<GuessResults guesses={guesses} />);
+    render(<GuessResults results={results} />);
 
     const row1 = screen.getByLabelText("row-1");
     expect(within(row1).getByLabelText("W")).toHaveClass("cell", "correct");

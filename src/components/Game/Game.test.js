@@ -8,7 +8,7 @@ describe("Game", () => {
   it(`displays ${NUM_OF_GUESSES_ALLOWED} rows and each row has 5 spans`, async () => {
     render(<Game answer="PEARL" />);
 
-    const rows = screen.getAllByRole("group");
+    const rows = screen.getAllByRole("group", { name: /row/i });
     expect(rows).toHaveLength(NUM_OF_GUESSES_ALLOWED);
 
     rows.forEach((row) => {
@@ -21,7 +21,7 @@ describe("Game", () => {
 
     render(<Game answer="PEARL" />);
 
-    await user.type(screen.getByRole("textbox"), "apple{enter}");
+    await user.keyboard("apple{enter}");
 
     const row1 = screen.getByLabelText("row-1");
     expect(within(row1).getByLabelText("A")).toBeInTheDocument();
@@ -38,8 +38,8 @@ describe("Game", () => {
 
     render(<Game answer="PEARL" />);
 
-    await user.type(screen.getByRole("textbox"), "apple{enter}");
-    await user.type(screen.getByRole("textbox"), "pearl{enter}");
+    await user.keyboard("apple{enter}");
+    await user.keyboard("pearl{enter}");
 
     expect(await screen.findByRole("banner")).toHaveTextContent(
       /congratulations! got it in 2 guesses/i
@@ -51,17 +51,20 @@ describe("Game", () => {
 
     render(<Game answer="PEARL" />);
 
-    await user.type(screen.getByRole("textbox"), "apple{enter}");
-    await user.type(screen.getByRole("textbox"), "whale{enter}");
-    await user.type(screen.getByRole("textbox"), "labor{enter}");
-    await user.type(screen.getByRole("textbox"), "grand{enter}");
-    await user.type(screen.getByRole("textbox"), "house{enter}");
-    await user.type(screen.getByRole("textbox"), "great{enter}");
+    await user.keyboard("apple{enter}");
+    await user.keyboard("whale{enter}");
+    await user.keyboard("labor{enter}");
+    await user.keyboard("grand{enter}");
+    await user.keyboard("house{enter}");
+    await user.keyboard("great{enter}");
 
     expect(await screen.findByRole("banner")).toHaveTextContent(
       /sorry, the correct answer is PEARL/i
     );
 
-    expect(screen.getByRole("textbox")).toBeDisabled();
+    const buttons = screen.getAllByRole("button");
+    buttons.forEach((button) => {
+      expect(button).toBeDisabled();
+    });
   });
 });

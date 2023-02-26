@@ -1,13 +1,13 @@
 import { range } from "../../utils";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
-export const GuessResults = ({ guesses }) => {
+export const GuessResults = ({ results }) => {
   const rows = range(0, NUM_OF_GUESSES_ALLOWED);
 
   return (
     <div className="guess-results">
       {rows.map((index) => {
-        const { id = index, result = [] } = guesses[index] || {};
+        const { id = index, result = [] } = results[index] || {};
         const labelText = `row-${index + 1}`;
 
         return <Guess key={id} result={result} labelText={labelText} />;
