@@ -1,12 +1,14 @@
 import React from "react";
 
+import { useAnswer } from "../useAnswer";
 import { GuessResults } from "../GuessResults";
 import { Banner } from "../Banner";
 import { checkGuess } from "../../game-helpers";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 import { Keyboard } from "../Keyboard";
 
-function Game({ answer }) {
+function Game() {
+  const { data: answer, refetch } = useAnswer();
   const [guesses, setGuesses] = React.useState([]);
   const [numOfCheckedGuess, setNumOfCheckedGuess] = React.useState(0);
 
@@ -90,6 +92,12 @@ function Game({ answer }) {
     }
   };
 
+  const handleRestart = () => {
+    refetch();
+    setGuesses([]);
+    setNumOfCheckedGuess(0);
+  };
+
   return (
     <>
       <GuessResults results={results} />
@@ -103,6 +111,7 @@ function Game({ answer }) {
           hasCorrectGuess={hasCorrectGuess}
           attemptsCount={numOfCheckedGuess}
           answer={answer}
+          onClickRestart={handleRestart}
         />
       )}
     </>
